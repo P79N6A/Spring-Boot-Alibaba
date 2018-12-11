@@ -15,9 +15,6 @@ import java.util.Map;
 @RestController
 public class AppController {
 
-
-    @Autowired
-    Redis redis;
     /**
      * 健康检查，系统部署需要
      * 请不要删除！！
