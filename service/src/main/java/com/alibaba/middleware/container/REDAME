@@ -1,0 +1,32 @@
+###########################
+pool       >>>>>  异步任务框架
+code       >>>>>  使用方式
+###########################
+@Async("taskExecutor")
+ public void fun(){
+ //方法加上注解@Async("taskExecutor")，标示该方法是异步的
+ }
+
+
+###########################
+redis      >>>>>  缓存框架
+code       >>>>>  使用方式
+###########################
+@Autowired
+Redis redis;
+
+redis.xxx();
+
+
+###########################
+scheduled  >>>>>  调度框架
+code       >>>>>  使用方式
+###########################
+@Autowired
+ScheduledTasks scheduledTasks;
+
+String run = CronUtils.getCron(new Date("执行的时间"));
+String class_job_name = com.alibaba.middleware.scheduled.Job.AnlyJob;
+String group_id = "GROUP_1314";
+Object obj = new Object();//传参对象
+scheduledTasks.addJob(class_job_name, group_id, run, obj);

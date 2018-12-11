@@ -1,0 +1,152 @@
+project:
+  name: QuickBoot
+
+#endpoints:
+#  shutdown:
+#     # 启用shutdown
+#    enabled: true
+#     # 禁用密码验证
+#    sensitive: false
+## endpoint配置
+#management:
+#  port: 7002
+
+server:
+  # http服务器端口
+  port: 9002
+  # 配置路由名
+#  context-path: /admin
+
+
+
+
+
+
+
+# ------------ 日志保存位置针对linux ------------ #
+logging:
+  path: home/boot/logs
+
+
+
+
+
+
+
+
+
+
+spring:
+
+  #开发模式dev/生产模式prod 关系到日志的打印
+  profiles:
+    active: dev
+
+
+  ################ 容器 Redis start ###############
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # [单机 二选一]
+    # Redis服务器地址
+    host: 11.3.155.190
+    # Redis服务器连接端口
+    port: 6379
+    # [集群 二选一]
+#    cluster:
+#      nodes: 10.126.13.233:6386,10.126.13.233:6387,10.126.13.233:6388
+      # Redis服务器连接密码（默认为空）
+    password:
+    # 连接超时时间（毫秒）
+    timeout: 5000
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
+  ################ 容器 redis end   ###############
+
+
+  ################ 容器 quartz start ##############
+#  quartz:
+#    #相关属性配置
+#    properties:
+#      org:
+#        quartz:
+#          scheduler:
+#            instanceName: clusteredScheduler
+#            instanceId: AUTO
+#          jobStore:
+#            # 默认存储在内存中
+#            class: org.quartz.simpl.RAMJobStore
+#            # 持久化
+##            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+##            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+##            tablePrefix: QRTZ_
+#            isClustered: true
+#            clusterCheckinInterval: 10000
+#            useProperties: false
+#          threadPool:
+#            class: org.quartz.simpl.SimpleThreadPool
+#            threadCount: 10
+#            threadPriority: 5
+#            threadsInheritContextClassLoaderOfInitializingThread: true
+##    #数据库方式
+#    job-store-type: memory
+################ 容器 quartz end ###############
+
+
+
+################ 容器 单点登录 start ############
+# buc配置，详见 http://gitlab.alibaba-inc.com/middleware-container/pandora-boot/wikis/spring-boot-buc
+# 从2017-11-release 版本后在buc服务器上配置，本地无效，参考buc本身文档
+  buc:
+      app-name: log-stash-mango
+      client-key: e85097f9-71b1-4a1a-ad06-ff6f92afd9ae
+      app-code: 189ed8e71c3f40e6be2e9a465394e129
+      excludeUrl: /admin/
+      accessControlAllowOrigin: "*"
+      sso-server-url: https://login-test.alibaba-inc.com
+      enable-buc: false
+  session:
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
+    store-type: redis
+# 在2017-11-release 版本之后，loginEnv参数是必需的，日常环境配置为daily，线上环境配置为online。参考buc本身的文档
+################ 容器 单点登录 end ############
+
+
+################ 基础配置 start ###############
+
+cors:
+  allow:
+    # ------------ url跨域过滤允许 ------------ #
+    origin:
+    # ------------ 方法拦截配置用,隔开 ------------ #
+    url: test
+cmp:
+  ugc:
+    local:
+     # ------------ 敏感词过滤:part部分匹配  complete精准匹配 ------------ #
+      part:
+        match:
+          keyword:
+            files: sensitive/part.txt
+      complete:
+        match:
+          keyword:
+            files: sensitive/completion.txt
+      random:
+        # ------------ 预设的随机用户名 ------------ #
+        nickname: nicknames/name.txt
+## ------------ 定时器 ------------ #
+per:
+  jobs:
+    calcmonitor: 0 0/10 * * * ?
+
